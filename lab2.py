@@ -84,7 +84,6 @@ def generate_with_1st_word(basic_text, length, begins_with):
     words, probs = get_probabilities(ngrams, [begins_with])
     text.append(random.choices(words, probs)[0])
     ngrams = get_ngram_counts(basic_text, 3)
-    print(text)
     for i in range(2, length): 
         words, probs = get_probabilities(ngrams, text[i-2:i])
         if len(words) == 0:

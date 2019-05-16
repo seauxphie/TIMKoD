@@ -1,0 +1,4 @@
+norm_wiki_en.txt
+Entropia znaków:4.173972683004312norm_wiki_en.txt
+Entropia s³ów:7.732725484056667norm_wiki_en.txt
+Entropia arunkowa znaków 1 rzêdu:3.222062174117307
