@@ -3,17 +3,24 @@ import math
 
 def count_subarray(subarr, arr): 
     count=0
+
     j=0
-    for i in range(len(arr)):
+    i=0
+    #print("len", len(subarr), len(arr))
+    #for i in range(len(arr)):
+    while i<len(arr):
+        #print(i,j)
         if arr[i]==subarr[j]:
             j+=1
             if j==len(subarr):
                 count+=1
                 j=0
-        elif arr[i]==subarr[0]:
-            j=1
+        #elif arr[i]==subarr[0]:
+            #j=1
         else:
+            i=i-j
             j=0
+        i+=1
     return count
 
 def frequency(text):
@@ -43,17 +50,15 @@ def probability_word(text):
 
 
 #entropia
-print((-1)*math.log((1/37), 2))
+#print((-1)*math.log((1/37), 2))
 
 def get_ngram_probabilities_words(text, n): 
     words=text.split(' ')
     dic={}
     dic2={}
-    counts=[]
-    ngrams=[]
     count_all=0
-    for i in range(0, len(words)-n+1):
-        ngram_arr=words[i:i+n]
+    for i in range(n, len(words)+1):
+        ngram_arr=words[i-n:i]
         #print(ngram_arr)
         ngram=tuple(ngram_arr)
         if dic.get(ngram) == None:
@@ -70,7 +75,7 @@ def get_ngram_probabilities_chars(text, n): #znajduje wszystkie bigramy
     dic={}
     dic2={}
     count_all=0
-    for i in range(n, len(text)):
+    for i in range(n, len(text)+1):
         ngram=text[i-n:i]
         if dic.get(ngram) == None:
             dic[ngram]=text.count(ngram)
@@ -92,10 +97,6 @@ def get_probabilities_chars(ngrams, begins_with):
     for i in range(len(probabilities)):
         probabilities[i]=probabilities[i]/count_all
     return letters, probabilities
-
-
-
-
 
 
 def get_probabilities_words(ngrams, begins_with):  
@@ -150,9 +151,11 @@ def cond_entropy_words(text, n):
     H=0
 
     for ngram, prob in ngrams_n.items():
-        words, probabilities = get_probabilities(ngrams_n1, ngram)
+        words, probabilities = get_probabilities_words(ngrams_n1, ngram)
         for word, probability in zip(words, probabilities):
-            new_ngram = tuple(list(ngram).append(word))
+            lista=list(ngram)
+            lista.append(word)
+            new_ngram = tuple(lista)
             p1 = ngrams_n1.get(new_ngram)
             H-=p1*math.log(probability, 2)
     return H
@@ -162,9 +165,10 @@ def cond_entropy_words(text, n):
 
 
 input=open("data/norm_wiki_en.txt", 'r')
+#input=open("test.txt", 'r')
 output=open("result.txt", 'w')
-text1=input.read()[:10000]
-
+#text1=input.read()[:10001]
+text1=input.read()
 
 result = entropy_chars(text1)
 print(result)
@@ -173,42 +177,39 @@ output.write(str(result))
 
 result = entropy_words(text1)
 print(result)
-output.write("norm_wiki_en.txt\nEntropia słów:")
-output.write(str(result))
-
-result = cond_entropy_chars(text1, 1)
-print(result)
-output.write("norm_wiki_en.txt\nEntropia arunkowa znaków 1 rzędu:")
-output.write(str(result))
-"""
-result = cond_entropy_chars(text1, 2)
-print(result)
-output.write("norm_wiki_en.txt\nEntropia arunkowa znaków 2 rzędu:")
-output.write(str(result))
-
-result = cond_entropy_chars(text1, 3)
-print(result)
-output.write("norm_wiki_en.txt\nEntropia arunkowa znaków 3 rzędu:")
-output.write(str(result))
-
-result = cond_entropy_chars(text1,4)
-print(result)
-output.write("norm_wiki_en.txt\nEntropia arunkowa znaków 4 rzędu:")
+output.write("\nEntropia słów:")
 output.write(str(result))
 
 
-result = cond_entropy_chars(text1,5)
-print(result)
-output.write("norm_wiki_en.txt\nEntropia arunkowa znaków 5 rzędu:")
-output.write(str(result))
-"""
-result = cond_entropy_words(text1,1)
-print(result)
-output.write("norm_wiki_en.txt\nEntropia arunkowa znaków 5 rzędu:")
-output.write(str(result))
+for i in range(1,6):
+    result = cond_entropy_chars(text1, i)
+    #print(result)
+    pom="\nEntropia warunkowa znaków "+str(i)+" rzędu:"
+    output.write(pom)
+    output.write(str(result))
+    """
+    result = cond_entropy_chars(text1, 2)
+    print(result)
+    output.write("norm_wiki_en.txt\nEntropia arunkowa znaków 2 rzędu:")
+    output.write(str(result))
+    result = cond_entropy_chars(text1, 3)
+    print(result)
+    output.write("norm_wiki_en.txt\nEntropia arunkowa znaków 3 rzędu:")
+    output.write(str(result))
+    result = cond_entropy_chars(text1,4)
+    print(result)
+    output.write("norm_wiki_en.txt\nEntropia arunkowa znaków 4 rzędu:")
+    output.write(str(result))
+    result = cond_entropy_chars(text1,5)
+    print(result)
+    output.write("norm_wiki_en.txt\nEntropia arunkowa znaków 5 rzędu:")
+    output.write(str(result))
+    """
+    result = cond_entropy_words(text1,i)
+    #print(result)
+    pom="\nEntropia warunkowa słów "+str(i)+" rzędu:"
+    output.write(pom)
+    output.write(str(result))
 
 
 output.close()
-
-
-
