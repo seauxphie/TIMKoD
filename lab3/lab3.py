@@ -181,7 +181,7 @@ output.write("\nEntropia słów:")
 output.write(str(result))
 
 
-for i in range(1,6):
+for i in range(1,5):
     result = cond_entropy_chars(text1, i)
     #print(result)
     pom="\nEntropia warunkowa znaków "+str(i)+" rzędu:"
