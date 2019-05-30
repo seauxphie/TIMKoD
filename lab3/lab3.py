@@ -23,6 +23,60 @@ def count_subarray(subarr, arr):
         i+=1
     return count
 
+def count_array(text,n):
+    counts = dict()
+    
+    text_size=len(text)
+    for i in range(n,text_size+1):
+        ngram=text[i-n:i]
+        ngram=tuple(ngram)
+        
+
+    '''for word in words:
+        if word in counts:
+            counts[word] += 1
+        else:
+            counts[word] = 1'''
+
+    return counts
+
+
+#entropia
+#print((-1)*math.log((1/37), 2))
+    
+ngrams1={}
+ngrams2={}
+ngrams3={}
+ngrams4={}
+ngrams5={}
+
+def get_ngram_probabilities_words(text, n): 
+    words=text.split(' ')
+    dic={}
+    dic2={}
+    count_all=0
+    text_size=len(words)+1
+    #print(words[0:5])
+    
+    for i in range(n, text_size):
+        ngram_arr=words[i-n:i]
+        #print(ngram_arr)
+        ngram=tuple(ngram_arr)
+        if dic.get(ngram) == None:
+            #c = count_subarray(ngram_arr, words)
+            
+            dic[ngram]=1
+            count_all+=1
+            #print(dic[ngram])
+        else:
+            dic[ngram]+=1
+            count_all+=1
+    
+    for key, value in dic.items():
+        dic2[key]=value/count_all
+    #print(dic2)
+    return dic2
+
 def frequency(text):
     dic={}
     probability=[]
@@ -47,28 +101,6 @@ def probability_word(text):
             probability.append(dic[word])
             words.append(word)
     return probability, words
-
-
-#entropia
-#print((-1)*math.log((1/37), 2))
-
-def get_ngram_probabilities_words(text, n): 
-    words=text.split(' ')
-    dic={}
-    dic2={}
-    count_all=0
-    for i in range(n, len(words)+1):
-        ngram_arr=words[i-n:i]
-        #print(ngram_arr)
-        ngram=tuple(ngram_arr)
-        if dic.get(ngram) == None:
-            c = count_subarray(ngram_arr, words)
-            dic[ngram]=c
-            count_all+=c
-            #print(dic[ngram])
-    for key, value in dic.items():
-        dic2[key]=value/count_all
-    return dic2
 
 
 def get_ngram_probabilities_chars(text, n): #znajduje wszystkie bigramy
@@ -144,9 +176,9 @@ def cond_entropy_chars(text, n):
             H-=p1*math.log(probability, 2)
     return H
 
-def cond_entropy_words(text, n):
-    ngrams_n1 = get_ngram_probabilities_words(text, n+1)
-    ngrams_n = get_ngram_probabilities_words(text, n)
+def cond_entropy_words(text, n,ngrams_n, ngrams_n1):
+    #ngrams_n1 = get_ngram_probabilities_words(text, n+1)
+    #ngrams_n = get_ngram_probabilities_words(text, n)
 
     H=0
 
@@ -164,11 +196,11 @@ def cond_entropy_words(text, n):
 
 
 
-input=open("data/norm_wiki_en.txt", 'r')
+input=open("data/sample4.txt", 'r')
 #input=open("test.txt", 'r')
 output=open("result.txt", 'w')
-#text1=input.read()[:10001]
-text1=input.read()
+text1=input.read()[:200000]
+#text1=input.read()
 
 result = entropy_chars(text1)
 print(result)
@@ -183,7 +215,7 @@ output.write(str(result))
 
 for i in range(1,5):
     result = cond_entropy_chars(text1, i)
-    #print(result)
+    print(result)
     pom="\nEntropia warunkowa znaków "+str(i)+" rzędu:"
     output.write(pom)
     output.write(str(result))
@@ -205,11 +237,37 @@ for i in range(1,5):
     output.write("norm_wiki_en.txt\nEntropia arunkowa znaków 5 rzędu:")
     output.write(str(result))
     """
-    result = cond_entropy_words(text1,i)
-    #print(result)
-    pom="\nEntropia warunkowa słów "+str(i)+" rzędu:"
-    output.write(pom)
-    output.write(str(result))
+
+ngrams1=get_ngram_probabilities_words(text1, 1)
+ngrams2=get_ngram_probabilities_words(text1, 2)
+ngrams3=get_ngram_probabilities_words(text1, 3)
+ngrams4=get_ngram_probabilities_words(text1, 4)
+ngrams4=get_ngram_probabilities_words(text1, 5)
+
+
+result = cond_entropy_words(text1,1, ngrams1, ngrams2)
+print(result)
+pom="\nEntropia warunkowa słów 1 rzędu:"
+output.write(pom)
+output.write(str(result))
+
+result = cond_entropy_words(text1,2, ngrams2, ngrams3)
+print(result)
+pom="\nEntropia warunkowa słów 2 rzędu:"
+output.write(pom)
+output.write(str(result))
+
+result = cond_entropy_words(text1,3, ngrams3, ngrams4)
+print(result)
+pom="\nEntropia warunkowa słów 3 rzędu:"
+output.write(pom)
+output.write(str(result))
+
+result = cond_entropy_words(text1,4, ngrams4, ngrams5)
+print(result)
+pom="\nEntropia warunkowa słów 4 rzędu:"
+output.write(pom)
+output.write(str(result))
 
 
 output.close()

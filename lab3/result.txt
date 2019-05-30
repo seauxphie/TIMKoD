@@ -1,0 +1,6 @@
+norm_wiki_en.txt
+Entropia znaków:4.253505667475521
+Entropia s³ów:13.082770147161055
+Entropia warunkowa znaków 1 rzêdu:4.2254463161234685
+Entropia warunkowa znaków 2 rzêdu:4.117892330585189
+Entropia warunkowa znaków 3 rzêdu:3.3295952641616036
