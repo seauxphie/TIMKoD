@@ -52,9 +52,16 @@ def frequency(text):
     return result
 
 
+
+
+
 file=open("norm_wiki_sample.txt",'r')
 text=file.read()
 letters_to_bits, bits_to_letters = create(frequency(text))
 encoded = save(text, letters_to_bits)
 decoded = load(encoded, bits_to_letters)
-print(decoded)
+#print(decoded)
+if decoded == text:
+    print("The original and decoded documents are the same")
+else:
+    print("The documents are different")
