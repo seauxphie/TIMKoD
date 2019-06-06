@@ -196,7 +196,7 @@ def cond_entropy_words(text, n,ngrams_n, ngrams_n1):
 
 
 
-input=open("data/sample4.txt", 'r')
+input=open("data/norm_wiki_eo.txt", 'r')
 #input=open("test.txt", 'r')
 output=open("result.txt", 'w')
 text1=input.read()[:200000]
