@@ -38,10 +38,31 @@ def save(text, code):
     compressed_file = open("encoded", 'wb')
     encoded_text=encode(text, code)
     encoded_text.tofile(compressed_file)
+    
+    key=open("key.txt",'w')
+    key.write("key \n")
+    for k, v in letters_to_bits.items():
+        key.write("%s %s \n" % (k, v))
+        
+    compressed_file.close()
+    key.close()
     return encoded_text
 
-def load(text, code):
+def load(code):
+    text=bitarray()
+    compressed_file=open("encoded",'rb')
+    text.fromfile(compressed_file)
+    key=open("key.txt",'r')
+    keys=key.readlines()
+    for k in range (1,len(keys)):
+        letters_to_bits[keys[k][0]]=bitarray(keys[k][12:18])
+        temp = bitarray(keys[k][12:18]).tobytes()
+        bits_to_letters[temp]=keys[k][0]
+    
     decoded_text = decode(text, code)
+    
+    compressed_file.close()
+    key.close()
     return decoded_text
 
 def frequency(text):
@@ -59,9 +80,7 @@ file=open("norm_wiki_sample.txt",'r')
 text=file.read()
 letters_to_bits, bits_to_letters = create(frequency(text))
 encoded = save(text, letters_to_bits)
-decoded = load(encoded, bits_to_letters)
+decoded = load(bits_to_letters)
 #print(decoded)
-if decoded == text:
-    print("The original and decoded documents are the same")
-else:
-    print("The documents are different")
+
+file.close()
